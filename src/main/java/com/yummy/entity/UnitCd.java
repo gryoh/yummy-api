@@ -7,14 +7,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ST_STD_CD")
+@Table(name = "UNIT_CD")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StStdCd extends BaseEntity{
+public class UnitCd extends BaseEntity{
     @Id @GeneratedValue
-    Long id;
-
-    @Column(name = "GRP_CD")    private String grpCd;
-	@Column(name = "CD")        private String cd;
+    @Column(name = "UNIT_CD")   private Long id;
+	@Column(name = "UNIT_NAME") private String unitName;
 	@Column(name = "USE_YN")    private String useYn;
 }
