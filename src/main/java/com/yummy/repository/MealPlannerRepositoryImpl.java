@@ -1,4 +1,4 @@
 package com.yummy.repository;
 
-public class MealPlannerRepositoryImpl implements MealPlannerRepository {
+public class MealPlannerRepositoryImpl {
 }
