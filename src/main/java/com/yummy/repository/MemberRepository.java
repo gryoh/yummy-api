@@ -1,4 +1,8 @@
 package com.yummy.repository;
 
-public interface MemberRepository {
+import com.yummy.entity.MbrBase;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<MbrBase, Long> {
+
 }

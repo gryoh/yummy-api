@@ -1,25 +1,28 @@
 package com.yummy.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
-@Getter
-@Setter
 @Table(name = "MBR_RCP_LIKE")
-public class MbrRcpLike extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "MBR_RCP_NO")
-    private Double mbrRcpNo;
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MbrRcpLike extends BaseEntity{
+    @Id @GeneratedValue
+    @Column(name = "MBR_RCP_NO")    private Long mbrRcpNo;
+//    @Column(name = "MBR_NO")        private Long mbrNo;
+//    @Column(name = "RCP_NO")        private Long rcpNo;
 
-    @ManyToOne
-    @JoinColumn(name = "MBR_NO")
-    private Member member;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "mbrNo")
+    private com.yummy.entity.MbrBase mbrBase;
 
-    @ManyToOne
-    @JoinColumn(name = "RCP_NO")
-    private Recipe recipe;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "rcpNo")
+    private RcpBase rcpBase;
 }

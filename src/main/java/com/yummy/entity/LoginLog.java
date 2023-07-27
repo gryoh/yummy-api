@@ -1,18 +1,20 @@
 package com.yummy.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "LOGIN_LOG")
-public class LoginLog extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "MBR_NO")
-    private Double mbrNo;
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class LoginLog extends BaseEntity{
+    @Id @GeneratedValue
+    @Column(name = "MBR_NO")    private Long mbrNo;
+    @Column(name = "LGOIN_IP")  private String lgoinIp;
+    @Column(name = "LOGIN_ID")  private String loginId;
+    @Column(name = "LOGIN_YN")  private String loginYn;
+    @Column(name = "RESULT_CD") private String resultCd;
 }
