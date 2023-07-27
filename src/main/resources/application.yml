@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://gryoh.synology.me:3306/yummy?serverTimezone=UTC&characterEncoding=UTF-8
@@ -10,7 +12,7 @@ spring:
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create
+      ddl-auto: update
 logging:
   level:
     org:
