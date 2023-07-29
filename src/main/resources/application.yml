@@ -7,7 +7,7 @@ spring:
     username: yummy
     password: 1q2w3e4r5T!
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
     open-in-view: false
     show-sql: true
     hibernate:
