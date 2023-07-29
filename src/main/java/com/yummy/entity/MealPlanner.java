@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MealPlanner {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mpNo ; //식단번호
 
     @Column(name = "MP_NAME")           private String mpName;  //식단명

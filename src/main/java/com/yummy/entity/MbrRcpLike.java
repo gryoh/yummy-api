@@ -13,14 +13,14 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MbrRcpLike extends BaseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MBR_RCP_NO")    private Long mbrRcpNo;
 //    @Column(name = "MBR_NO")        private Long mbrNo;
 //    @Column(name = "RCP_NO")        private Long rcpNo;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "mbrNo")
-    private com.yummy.entity.MbrBase mbrBase;
+    private MbrBase mbrBase;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "rcpNo")
