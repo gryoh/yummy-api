@@ -1,9 +1,7 @@
 package com.yummy.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.*;
 import com.yummy.entity.BaseEntity;
 import com.yummy.entity.MbrBase;
 
@@ -11,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Data
 public class MbrBaseDto extends BaseEntity {
 
     private Long mbrNo;            // 회원번호
@@ -25,6 +24,7 @@ public class MbrBaseDto extends BaseEntity {
     private LocalDateTime cnclDt;  // 회원탈퇴일
     private String cnclCd;         // 회원탈퇴여부
 
+    @QueryProjection
     public MbrBaseDto(MbrBase mbrBase) {
         mbrNo = mbrBase.getMbrNo();
         loginId = mbrBase.getLoginId();
@@ -39,6 +39,7 @@ public class MbrBaseDto extends BaseEntity {
         cnclCd = mbrBase.getCnclCd();
     }
 
+    @QueryProjection
     public MbrBaseDto(Long mbrNo, String loginId, String name, String mbrPw, String mbrPhon, String mbrEmail, String mbrBirth, String mbrGradeCd, String joinCd, LocalDateTime cnclDt, String cnclCd) {
         this.mbrNo = mbrNo;
         this.loginId = loginId;
@@ -51,5 +52,17 @@ public class MbrBaseDto extends BaseEntity {
         this.joinCd = joinCd;
         this.cnclDt = cnclDt;
         this.cnclCd = cnclCd;
+    }
+
+    // 간단한 DTO
+    @QueryProjection
+    public MbrBaseDto(Long mbrNo, String loginId, String name, String mbrPhon, String mbrEmail, String mbrBirth, String mbrGradeCd) {
+        this.mbrNo = mbrNo;
+        this.loginId = loginId;
+        this.name = name;
+        this.mbrPhon = mbrPhon;
+        this.mbrEmail = mbrEmail;
+        this.mbrBirth = mbrBirth;
+        this.mbrGradeCd = mbrGradeCd;
     }
 }
