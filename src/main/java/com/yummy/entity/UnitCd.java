@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UnitCd extends BaseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UNIT_CD")   private Long id;
 	@Column(name = "UNIT_NAME") private String unitName;
 	@Column(name = "USE_YN")    private String useYn;

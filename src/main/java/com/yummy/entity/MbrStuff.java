@@ -13,18 +13,18 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "MBR_STUFF")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MbrStuff extends com.yummy.entity.BaseEntity {
-    @Id @GeneratedValue
-    @Column(name = "RCP_STUFF_NO")  private String rcpStuffNo;
+public class MbrStuff extends BaseEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "RCP_STUFF_NO")  private Long rcpStuffNo;
     @Column(name = "AMOUT")         private String amout;
     @Column(name = "UNIT_CD")       private String unitCd;
 	@Column(name = "EXPIRED_DATE")  private LocalDateTime expiredDate;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "mbr_no")
-    private com.yummy.entity.MbrBase mbrBase;
+    private MbrBase mbrBase;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "stuff_no")
-    private com.yummy.entity.StuffBase stuffBase;
+    private StuffBase stuffBase;
 }
