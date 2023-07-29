@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.yummy.entity.QMealPlanner.*;
 import static com.yummy.entity.QMealPlanner.mealPlanner;
 import static com.yummy.entity.QMealPlannerMapping.mealPlannerMapping;
 
