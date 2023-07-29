@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StuffBase extends BaseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "STUFF_NO")		private Long stuffNo;
     @Column(name = "STUFF_NAME")	private String stuffName;
 	@Column(name = "STUFF_DESC")	private String stuffDesc;

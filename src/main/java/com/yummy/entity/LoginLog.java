@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginLog extends BaseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MBR_NO")    private Long mbrNo;
     @Column(name = "LGOIN_IP")  private String lgoinIp;
     @Column(name = "LOGIN_ID")  private String loginId;

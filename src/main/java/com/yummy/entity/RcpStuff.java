@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RcpStuff extends BaseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RCP_STUFF_NO")  private Long rcpStuffNo;
     @Column(name = "AMOUNT")        private String amount;
 	@Column(name = "UNIT_CD")       private Integer unitCd;

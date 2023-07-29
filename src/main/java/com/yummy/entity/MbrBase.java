@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MbrBase extends BaseEntity{
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MBR_NO")        private Long mbrNo;            // 회원번호
     @Column(name = "LOGIN_ID")      private String loginId;        // 로그인ID
     @Column(name = "NAME")          private String name;           // 회원명

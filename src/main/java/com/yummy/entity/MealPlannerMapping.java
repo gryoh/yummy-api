@@ -11,9 +11,9 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Table(name = "MEAL_PLANNER_MAPPING")
 @NoArgsConstructor
-public class MealPlannerMapping extends com.yummy.entity.BaseEntity {
+public class MealPlannerMapping extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mpRcpNo;
 
     @ManyToOne(fetch = LAZY)
