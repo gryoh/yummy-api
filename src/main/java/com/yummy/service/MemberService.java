@@ -1,9 +1,12 @@
 package com.yummy.service;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yummy.dto.MbrBaseDto;
 import com.yummy.dto.QMbrBaseDto;
+import com.yummy.entity.QMbrBase;
+import com.yummy.entity.member.MbrBaseSearchCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +19,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.yummy.entity.QMbrBase.mbrBase;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 public class MemberService {
@@ -52,4 +56,42 @@ public class MemberService {
         return new PageImpl<>(content, pageable, total);
     }
 
+    /** 아이디 중복확인 **/
+    public List<MbrBase> searchMember(MbrBaseSearchCondition condition) {
+        return queryFactory
+                .selectFrom(mbrBase)
+                .where(
+                        mbrBaseLoginIdEq(condition.getLoginId())
+                        , mbrBaseMbrPwEq(condition.getMbrPw())
+                        , mbrBasemMbrNodEq(condition.getMbrNo())
+                )
+                .fetch();
+    }
+
+    /**
+     * mbrNo null check 값 비교
+     * @param mbrNo
+     * @return BooleanExpression
+     */
+    private BooleanExpression mbrBasemMbrNodEq(Long mbrNo) {
+        return isEmpty(mbrNo) ? null : mbrBase.mbrNo.eq(mbrNo);
+    }
+
+    /**
+     * mbrPw null check 값 비교
+     * @param mbrPw
+     * @return BooleanExpression
+     */
+    private BooleanExpression mbrBaseMbrPwEq(String mbrPw) {
+        return isEmpty(mbrPw) ? null : mbrBase.mbrPw.eq(mbrPw);
+    }
+
+    /**
+     * loginId null check 값 비교
+     * @param loginId
+     * @return BooleanExpression
+     */
+    private BooleanExpression mbrBaseLoginIdEq(String loginId) {
+        return isEmpty(loginId) ? null : mbrBase.loginId.eq(loginId);
+    }
 }
