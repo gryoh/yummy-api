@@ -17,8 +17,12 @@ group = 'com'
 version = '0.0.1-SNAPSHOT'
 apply plugin: 'war'
 
-bootWar.enabled = false
-war.enabled = true
+bootWar {
+	enabled = false
+}
+war {
+	enabled = true
+}
 
 java {
 	sourceCompatibility = '11'
@@ -56,7 +60,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 
-	providedRuntime 'org.springframwork.boot:spring-boot-starter-tomcat'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 test {

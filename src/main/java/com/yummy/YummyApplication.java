@@ -11,8 +11,8 @@ public class YummyApplication extends SpringBootServletInitializer{
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(YummyApplication.class);
-		//return super.configure(builder);
+		//return builder.sources(YummyApplication.class);
+		return super.configure(builder);
 	}
 
 	public static void main(String[] args) {
