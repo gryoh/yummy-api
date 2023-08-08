@@ -5,8 +5,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yummy.dto.MbrBaseDto;
 import com.yummy.dto.QMbrBaseDto;
-import com.yummy.entity.QMbrBase;
-import com.yummy.entity.member.MbrBaseSearchCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -57,7 +55,7 @@ public class MemberService {
     }
 
     /** 아이디 중복확인 **/
-    public List<MbrBase> searchMember(MbrBaseSearchCondition condition) {
+    public List<MbrBase> searchMember(MbrBaseDto condition) {
         return queryFactory
                 .selectFrom(mbrBase)
                 .where(
@@ -66,6 +64,18 @@ public class MemberService {
                         , mbrBasemMbrNodEq(condition.getMbrNo())
                 )
                 .fetch();
+    }
+
+    /** 회원가입 **/
+    public MbrBase memberJoin(MbrBaseDto mbrBaseDto) {
+//        if (mbrBase.getMbrEmail())
+        if (isEmpty(mbrBaseDto.getMbrEmail())) {
+            mbrBaseDto.setMbrEmail(mbrBaseDto.getLoginId());
+        }
+        MbrBase newMbrBase = new MbrBase(mbrBaseDto.getLoginId(), mbrBaseDto.getName(), mbrBaseDto.getMbrPw(),
+                mbrBaseDto.getMbrPhon(), mbrBaseDto.getMbrEmail(), "20230101", "1", "1", null, "N",  "DEV", "DEV");
+        return memberRepository.save(newMbrBase);
+
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.yummy.controller;
 
-import com.yummy.entity.member.MbrBaseSearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,40 +39,70 @@ public class MemberController {
         return memberService.selectMbrList(pageable);
     }
 
-    @GetMapping("/checkMemberId")
+    /**
+     * 회원가입 아이디 체크
+     * @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/checkMemberId")
     @ResponseBody
-    public String checkMemberId(@RequestBody MbrBaseSearchCondition mbrBaseSearchCondition) throws Exception {
+    public String checkMemberId(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
         String result = "T";
         // request 체크
-        if (null == mbrBaseSearchCondition) {
+        if (null == mbrBaseDto) {
             result = "Bad Request";
         } else {
             //아이디 공백체크
-            if (!isEmpty(mbrBaseSearchCondition.getLoginId())) {
-                List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseSearchCondition);
+            if (!isEmpty(mbrBaseDto.getLoginId())) {
+                List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseDto);
                 if (null != checkMemberIdList && checkMemberIdList.size() > 0 ) {
                     result = "F";
                 } else {
-                    result = mbrBaseSearchCondition.getLoginId();
+                    result = mbrBaseDto.getLoginId();
                 }
             }
         }
         return result;
     }
 
-    @GetMapping("/login")
+    /**
+     * 회원가입
+     * @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/memberJoin")
     @ResponseBody
-    public String login(@RequestBody MbrBaseSearchCondition mbrBaseSearchCondition) throws Exception {
+    public MbrBase memberJoin(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
+        MbrBase result = null;
+        if (null != mbrBaseDto) {
+            if (!isEmpty(mbrBaseDto.getName()) && !isEmpty(mbrBaseDto.getMbrPhon()) && !isEmpty(mbrBaseDto.getMbrPw()) && !isEmpty(mbrBaseDto.getMbrPhon()) && !isEmpty(mbrBaseDto.getMbrPw())) {
+                result =  memberService.memberJoin(mbrBaseDto);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 로그인
+     * @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public String login(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
         String result = "F";
         // request 체크
-        if (null == mbrBaseSearchCondition) {
+        if (null == mbrBaseDto) {
             result = "Bad Request";
         } else {
             //아이디 공백체크
-            if (!isEmpty(mbrBaseSearchCondition.getLoginId()) && !isEmpty(mbrBaseSearchCondition.getMbrPw())) {
-                List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseSearchCondition);
+            if (!isEmpty(mbrBaseDto.getLoginId()) && !isEmpty(mbrBaseDto.getMbrPw())) {
+                List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseDto);
                 if (null != checkMemberIdList && checkMemberIdList.size() > 0 ) {
-                    result = "로그인성공 ---> " + mbrBaseSearchCondition.getLoginId();
+                    result = "로그인성공 ---> " + mbrBaseDto.getLoginId();
                 } else {
                     result = "F";
                 }
