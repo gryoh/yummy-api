@@ -12,6 +12,7 @@ import com.yummy.entity.StuffBase;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 
 @Profile("local")
 @Component
@@ -19,14 +20,13 @@ import javax.persistence.PersistenceContext;
 public class InitDB {
 
     private final InitDBService initDBService;
-/*
+    /*
     @PostConstruct
     public void init(){
 
         initDBService.init();
     }
-*/
-
+    */
     @Component
     static class InitDBService {
         @PersistenceContext
@@ -45,7 +45,11 @@ public class InitDB {
                     "10",
                     "1",
                     null,
-                    null
+                    null,
+                    LocalDateTime.now(),
+                    "ohj",
+                    LocalDateTime.now(),
+                    "ohj"
             );
             em.persist(mbrBase);
 

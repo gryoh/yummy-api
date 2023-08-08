@@ -9,11 +9,20 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 	id 'java'
+	id 'war'
 
 }
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
+apply plugin: 'war'
+
+bootWar {
+	enabled = false
+}
+war {
+	enabled = true
+}
 
 java {
 	sourceCompatibility = '11'
@@ -51,6 +60,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 test {

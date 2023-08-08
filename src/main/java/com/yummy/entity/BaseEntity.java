@@ -13,16 +13,16 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @Column(updatable = false, name = "SYS_REG_TIME")
-    private LocalDateTime sysRegTime;
+    protected LocalDateTime sysRegTime;
 
     @Column(updatable = false, name = "SYS_REG_ID")
-    private String sysRegId;
+    protected String sysRegId;
 
     @Column(name = "SYS_MOD_TIME")
-    private LocalDateTime sysModTime;
+    protected LocalDateTime sysModTime;
 
     @Column(name = "SYS_MOD_ID")
-    private String sysModId;
+    protected String sysModId;
 
     @PrePersist
     public void prePersist(){
