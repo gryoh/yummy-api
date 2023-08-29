@@ -50,19 +50,19 @@ public class MemberController {
      */
     @PostMapping("/checkMemberId")
     @ResponseBody
-    public String checkMemberId(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
-        String result = "T";
+    public boolean checkMemberId(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
+        boolean result = false;
         // request 체크
         if (null == mbrBaseDto) {
-            result = "Bad Request";
+            result = false;
         } else {
             //아이디 공백체크
             if (!isEmpty(mbrBaseDto.getLoginId())) {
                 List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseDto);
                 if (null != checkMemberIdList && checkMemberIdList.size() > 0 ) {
-                    result = "F";
+                    result = false;
                 } else {
-                    result = mbrBaseDto.getLoginId();
+                    result = true;
                 }
             }
         }
@@ -77,6 +77,7 @@ public class MemberController {
      */
     @PostMapping("/memberJoin")
     @ResponseBody
+    @Transactional
     public MbrBase memberJoin(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
         MbrBase result = null;
         if (null != mbrBaseDto) {
