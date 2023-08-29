@@ -1,10 +1,13 @@
 package com.yummy.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.yummy.dto.MbrBaseDto;
@@ -90,24 +93,26 @@ public class MemberController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/login")
+    @PostMapping("/goLogin")
     @ResponseBody
+    @Transactional
     public String login(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
-        String result = "F";
+        ObjectMapper mapper = new ObjectMapper();
+        String result;
+
         // request 체크
         if (null == mbrBaseDto) {
-            result = "Bad Request";
+            result = "F";
         } else {
             //아이디 공백체크
             if (!isEmpty(mbrBaseDto.getLoginId()) && !isEmpty(mbrBaseDto.getMbrPw())) {
-                List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseDto);
-                if (null != checkMemberIdList && checkMemberIdList.size() > 0 ) {
-                    result = "로그인성공 ---> " + mbrBaseDto.getLoginId();
-                } else {
-                    result = "F";
-                }
+                MbrBase mbrBase = memberService.loginMember(mbrBaseDto);
+                result = mapper.registerModule(new JavaTimeModule()).writeValueAsString(mbrBase);
+            } else {
+                result = "F";
             }
         }
+
         return result;
     }
 

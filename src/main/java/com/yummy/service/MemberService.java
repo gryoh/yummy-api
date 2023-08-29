@@ -60,10 +60,19 @@ public class MemberService {
                 .selectFrom(mbrBase)
                 .where(
                         mbrBaseLoginIdEq(condition.getLoginId())
-                        , mbrBaseMbrPwEq(condition.getMbrPw())
-                        , mbrBasemMbrNodEq(condition.getMbrNo())
                 )
                 .fetch();
+    }
+
+    /** 로그안 **/
+    public MbrBase loginMember(MbrBaseDto condition) {
+        return queryFactory
+                .selectFrom(mbrBase)
+                .where(
+                        mbrBaseLoginIdEq(condition.getLoginId())
+                        , mbrBaseMbrPwEq(condition.getMbrPw())
+                )
+                .fetchFirst();
     }
 
     /** 회원가입 **/
