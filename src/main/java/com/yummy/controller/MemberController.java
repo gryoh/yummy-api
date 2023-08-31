@@ -2,6 +2,7 @@ package com.yummy.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.yummy.dto.Const;
 import com.yummy.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class MemberController {
     @ResponseBody
     @Transactional
     public String goLogin(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
-        String result = "F";
+        String result = Const.BOOLEAN_FALSE;;
 
         // request 체크
         if (null != mbrBaseDto) {
@@ -131,7 +132,7 @@ public class MemberController {
     @Transactional
     public String getMbrInfo(Authentication authentication) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        String result = "F";
+        String result = Const.BOOLEAN_FALSE;
 
         // request 체크
         if (!isEmpty(authentication.getName())) {

@@ -35,13 +35,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Header의 Authorization 값이 'Bearer '로 시작하지 않으면 => 잘못된 토큰
+        // Header의 Authorization 값이 'Yummy '로 시작하지 않으면 => 잘못된 토큰
         if (!authorizationHeader.startsWith("Yummy ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 전송받은 값에서 'Bearer ' 뒷부분(Jwt Token) 추출
+        // 전송받은 값에서 'Yummy ' 뒷부분(Jwt Token) 추출
         String token = authorizationHeader.split(" ")[1];
 
         // 전송받은 Jwt Token이 만료되었으면 => 다음 필터 진행(인증 X)
