@@ -1,6 +1,7 @@
 package com.yummy.service;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yummy.dto.MbrBaseDto;
 import com.yummy.dto.QMbrBaseDto;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.yummy.entity.QMbrBase.mbrBase;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 public class MemberService {
@@ -52,4 +54,53 @@ public class MemberService {
         return new PageImpl<>(content, pageable, total);
     }
 
+    /** 아이디 중복확인, 로그인 **/
+    public MbrBase searchMember(MbrBaseDto condition) {
+        return queryFactory
+                .selectFrom(mbrBase)
+                .where(
+                        mbrBaseLoginIdEq(condition.getLoginId())
+                        , mbrBaseMbrPwEq(condition.getMbrPw())
+                )
+                .fetchFirst();
+    }
+
+    /** 회원가입 **/
+    public MbrBase memberJoin(MbrBaseDto mbrBaseDto) {
+//        if (mbrBase.getMbrEmail())
+        if (isEmpty(mbrBaseDto.getMbrEmail())) {
+            mbrBaseDto.setMbrEmail(mbrBaseDto.getLoginId());
+        }
+        MbrBase newMbrBase = new MbrBase(mbrBaseDto.getLoginId(), mbrBaseDto.getName(), mbrBaseDto.getMbrPw(),
+                mbrBaseDto.getMbrPhon(), mbrBaseDto.getMbrEmail(), "20230101", "1", "1", null, "N",  "DEV", "DEV");
+        return memberRepository.save(newMbrBase);
+
+    }
+
+    /**
+     * mbrNo null check 값 비교
+     * @param mbrNo
+     * @return BooleanExpression
+     */
+    private BooleanExpression mbrBasemMbrNodEq(Long mbrNo) {
+        return isEmpty(mbrNo) ? null : mbrBase.mbrNo.eq(mbrNo);
+    }
+
+    /**
+     * mbrPw null check 값 비교
+     * @param mbrPw
+     * @return BooleanExpression
+     */
+    private BooleanExpression mbrBaseMbrPwEq(String mbrPw) {
+        return isEmpty(mbrPw) ? null : mbrBase.mbrPw.eq(mbrPw);
+    }
+
+    /**
+     * loginId null check 값 비교
+     * @param loginId
+     * @return BooleanExpression
+     */
+    private BooleanExpression mbrBaseLoginIdEq(String loginId) {
+        return isEmpty(loginId) ? null : mbrBase.loginId.eq(loginId);
+    }
 }

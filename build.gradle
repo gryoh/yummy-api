@@ -53,6 +53,13 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// JWT Token
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
