@@ -54,18 +54,8 @@ public class MemberService {
         return new PageImpl<>(content, pageable, total);
     }
 
-    /** 아이디 중복확인 **/
-    public List<MbrBase> searchMember(MbrBaseDto condition) {
-        return queryFactory
-                .selectFrom(mbrBase)
-                .where(
-                        mbrBaseLoginIdEq(condition.getLoginId())
-                )
-                .fetch();
-    }
-
-    /** 로그안 **/
-    public MbrBase loginMember(MbrBaseDto condition) {
+    /** 아이디 중복확인, 로그인 **/
+    public MbrBase searchMember(MbrBaseDto condition) {
         return queryFactory
                 .selectFrom(mbrBase)
                 .where(

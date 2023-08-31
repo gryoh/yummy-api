@@ -2,12 +2,16 @@ package com.yummy.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.yummy.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.yummy.dto.MbrBaseDto;
@@ -58,11 +62,11 @@ public class MemberController {
         } else {
             //아이디 공백체크
             if (!isEmpty(mbrBaseDto.getLoginId())) {
-                List<MbrBase> checkMemberIdList = memberService.searchMember(mbrBaseDto);
-                if (null != checkMemberIdList && checkMemberIdList.size() > 0 ) {
-                    result = false;
-                } else {
+                MbrBase mbrBase = memberService.searchMember(mbrBaseDto);
+                if (ObjectUtils.isEmpty(mbrBase)) {
                     result = true;
+                } else {
+                    result = false;
                 }
             }
         }
@@ -97,21 +101,46 @@ public class MemberController {
     @PostMapping("/goLogin")
     @ResponseBody
     @Transactional
-    public String login(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String result;
+    public String goLogin(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
+        String result = "F";
 
         // request 체크
-        if (null == mbrBaseDto) {
-            result = "F";
-        } else {
-            //아이디 공백체크
+        if (null != mbrBaseDto) {
             if (!isEmpty(mbrBaseDto.getLoginId()) && !isEmpty(mbrBaseDto.getMbrPw())) {
-                MbrBase mbrBase = memberService.loginMember(mbrBaseDto);
-                result = mapper.registerModule(new JavaTimeModule()).writeValueAsString(mbrBase);
-            } else {
-                result = "F";
+                MbrBase mbrBase = memberService.searchMember(mbrBaseDto);
+                // 로그인 성공시 토큰 발행
+                if (!ObjectUtils.isEmpty(mbrBase)) {
+                    String secretKey = "yummy-secret-key-20230831";
+                    long expireTimeMs = 1000 * 60 * 60;
+                    result = "Yummy " + JwtTokenUtil.createToken(mbrBase.getLoginId(), secretKey, expireTimeMs);
+                }
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * 회원 정보 조회
+     * @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/getMbrInfo")
+    @ResponseBody
+    @Transactional
+    public String getMbrInfo(Authentication authentication) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = "F";
+
+        // request 체크
+        if (!isEmpty(authentication.getName())) {
+            MbrBaseDto mbrBaseDto = new MbrBaseDto(authentication.getName());
+            MbrBase mbrBase = memberService.searchMember(mbrBaseDto);
+            if (!ObjectUtils.isEmpty(mbrBase)) {
+                result = mapper.registerModule(new JavaTimeModule()).writeValueAsString(mbrBase);
+            }
+
         }
 
         return result;
