@@ -62,4 +62,18 @@ public class MbrBase extends BaseEntity{
         this.sysModTime = sysModTime;
         this.sysModId = sysModId;
     }
+    public MbrBase(String loginId, String name, String mbrPw, String mbrPhon, String mbrEmail, String mbrBirth, String mbrGradeCd, String joinCd, LocalDateTime cnclDt, String cnclCd, String sysRegId, String sysModId) {
+        this.loginId = loginId;
+        this.name = name;
+        this.mbrPw = mbrPw;
+        this.mbrPhon = mbrPhon;
+        this.mbrEmail = mbrEmail;
+        this.mbrBirth = mbrBirth;
+        this.mbrGradeCd = mbrGradeCd;
+        this.joinCd = joinCd;
+        this.cnclDt = cnclDt;
+        this.cnclCd = cnclCd;
+        this.sysRegId = sysRegId;
+        this.sysModId = sysModId;
+    }
 }

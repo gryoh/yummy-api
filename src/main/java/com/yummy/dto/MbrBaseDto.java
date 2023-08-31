@@ -24,6 +24,10 @@ public class MbrBaseDto extends BaseEntity {
     private LocalDateTime cnclDt;  // 회원탈퇴일
     private String cnclCd;         // 회원탈퇴여부
 
+    public MbrBaseDto(String loginId) {
+        this.loginId = loginId;
+    }
+
     @QueryProjection
     public MbrBaseDto(MbrBase mbrBase) {
         mbrNo = mbrBase.getMbrNo();
