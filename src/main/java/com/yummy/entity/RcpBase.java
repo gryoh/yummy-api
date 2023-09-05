@@ -20,6 +20,8 @@ public class RcpBase extends BaseEntity {
     @Column(name = "RCP_NAME")          private String rcpName; //레시피명
 	@Column(name = "RCP_DESCRIPTION")   private String rcpDescription;  //레시피설명
 	@Column(name = "USE_YN")            private String useYn;   //사용여부
+    @Column(name = "FILE_PATH")         private String filePath;    // 이미지경로
+    @Column(name = "FILE_NAME")         private String fileName;    // 이미지명
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "stuff_no")
@@ -33,6 +35,10 @@ public class RcpBase extends BaseEntity {
 
     @OneToMany(mappedBy = "mealPlanner", cascade = CascadeType.ALL)
     private List<com.yummy.entity.MealPlannerMapping> mealPlannerMappings = new ArrayList<>();
+
+    public RcpBase(Long rcpNo){
+        this.rcpNo = rcpNo;
+    }
 
     public RcpBase(String rcpName, String rcpDescription, String useYn) {
         this.rcpName = rcpName;

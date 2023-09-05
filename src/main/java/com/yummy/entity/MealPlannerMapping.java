@@ -21,4 +21,13 @@ public class MealPlannerMapping extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     private RcpBase rcpBase;
+
+    public MealPlannerMapping(Long mpNo, Long rcpNo) {
+        if(this.mealPlanner == null){
+            this.mealPlanner = new MealPlanner(mpNo);
+        }
+        if(this.rcpBase == null){
+            this.rcpBase = new RcpBase(rcpNo);
+        }
+    }
 }
