@@ -44,7 +44,8 @@ dependencies {
 
 	//querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 	//mysql
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.1.2'
