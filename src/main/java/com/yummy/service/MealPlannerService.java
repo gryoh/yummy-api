@@ -1,6 +1,7 @@
 package com.yummy.service;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,10 @@ import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.yummy.entity.QRcpBase.rcpBase;
 import static com.yummy.entity.QMealPlanner.mealPlanner;
 import static com.yummy.entity.QMealPlannerMapping.mealPlannerMapping;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
 public class MealPlannerService {
@@ -42,7 +45,7 @@ public class MealPlannerService {
                 mealPlannerDto.getMpName(),
                 mealPlannerDto.getMpDescription(),
                 mealPlannerDto.getMbrNo(),
-                mealPlannerDto.getDelYn()
+                "N"
         );
         mealPlannerRepository.save(mealPlanner);
 
@@ -50,24 +53,30 @@ public class MealPlannerService {
 
         //식단 매핑정보 추가
         Arrays.stream(mealPlannerDto.getRcpNos().split(","))
+                .map(Long::parseLong)
                 .forEach(r -> {
                     //MealPlannerMapping mealPlannerMapping = new MealPlannerMapping(mpNo, Long.parseLong(r));
                     //MealPlannerMapping mealPlannerMapping = new MealPlannerMapping(mpNo, Long.parseLong(r));
-                    mealPlannerMappingRepository.save(new MealPlannerMapping());
+                    mealPlannerMappingRepository.save(new MealPlannerMapping(mpNo, r));
                 });
     }
 
-    public Page<MealPlannerDto> selectMealPlannerList(Pageable pageable) {
+    public Page<MealPlannerDto> selectMealPlannerList(Pageable pageable, long mbrNo) {
         QueryResults<MealPlannerDto> result = queryFactory.select(new QMealPlannerDto(
                         mealPlannerMapping.mealPlanner.mpNo,
-                        mealPlanner.mpName,
                         mealPlanner.mpDescription,
-                        mealPlanner.mbrNo,
-                        mealPlanner.delYn,
-                        mealPlannerMapping.rcpBase.rcpNo
+                        rcpBase.rcpNo,
+                        rcpBase.rcpName,
+                        rcpBase.rcpDescription,
+                        rcpBase.filePath,
+                        rcpBase.fileName
                 ))
                 .from(mealPlannerMapping)
                 .leftJoin(mealPlannerMapping.mealPlanner, mealPlanner)
+                .leftJoin(mealPlannerMapping.rcpBase, rcpBase)
+                .where(
+                        mealPlannerMbrNoEq(mbrNo)
+                )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -79,22 +88,26 @@ public class MealPlannerService {
     }
 
     public List<MealPlannerDto> selectMealPlannerListV2(Pageable pageable) {
-        QueryResults<MealPlannerDto> result =
-                queryFactory
-                        .select(new QMealPlannerDto(
-                                mealPlannerMapping.mealPlanner.mpNo,
-                                mealPlanner.mpName,
-                                mealPlanner.mpDescription,
-                                mealPlanner.mbrNo,
-                                mealPlanner.delYn,
-                                mealPlannerMapping.rcpBase.rcpNo
-                        ))
-                        .from(mealPlannerMapping)
-                        .leftJoin(mealPlannerMapping.mealPlanner, mealPlanner)
-                        .offset(pageable.getOffset())
-                        .limit(pageable.getPageSize())
-                        .fetchResults();
+        QueryResults<MealPlannerDto> result = queryFactory.select(new QMealPlannerDto(
+                    mealPlannerMapping.mealPlanner.mpNo,
+                    mealPlanner.mpDescription,
+                    rcpBase.rcpNo,
+                    rcpBase.rcpName,
+                    rcpBase.rcpDescription,
+                    rcpBase.filePath,
+                    rcpBase.fileName
+                ))
+                .from(mealPlannerMapping)
+                .leftJoin(mealPlannerMapping.mealPlanner, mealPlanner)
+                .leftJoin(mealPlannerMapping.rcpBase, rcpBase)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
         return result.getResults();
+    }
+
+    private BooleanExpression mealPlannerMbrNoEq(long mbrNo) {
+        return isEmpty(mbrNo) ? null : mealPlanner.mbrNo.eq(mbrNo);
     }
 }
