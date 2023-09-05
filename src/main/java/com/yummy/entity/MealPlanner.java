@@ -20,7 +20,11 @@ public class MealPlanner {
     @Column(name = "MP_DESCRIPTION")    private String mpDescription;   //식단설명
     @Column(name = "MBR_NO")            private Long mbrNo;   //회원번호
     @Column(name = "DEL_YN")            private String delYn;   //삭제여부
-    
+
+    public MealPlanner(Long mpNo) {
+        this.mpNo = mpNo;
+    }
+
     public MealPlanner(String mpName, String mpDescription, Long mbrNo, String delYn) {
         this.mpName = mpName;
         this.mpDescription = mpDescription;
