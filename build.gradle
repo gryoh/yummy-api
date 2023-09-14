@@ -68,6 +68,7 @@ dependencies {
 	}
 
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	implementation 'org.apache.commons:commons-lang3:3.0'
 }
 
 test {
