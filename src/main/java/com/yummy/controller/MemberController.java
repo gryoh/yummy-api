@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yummy.dto.Const;
 import com.yummy.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/member")
 @RequiredArgsConstructor
 public class MemberController {
