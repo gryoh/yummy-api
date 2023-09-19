@@ -3,8 +3,11 @@ package com.yummy.service;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.yummy.dto.LoginLogDto;
 import com.yummy.dto.MbrBaseDto;
 import com.yummy.dto.QMbrBaseDto;
+import com.yummy.entity.LoginLog;
+import com.yummy.repository.LoginLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,6 +31,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private LoginLogRepository loginLogRepository;
 
     public void insertMember(MbrBase mbrBase){
         memberRepository.save(mbrBase);
@@ -76,7 +82,11 @@ public class MemberService {
         return memberRepository.save(newMbrBase);
 
     }
-
+    /** 로그인 로그 등록 **/
+    public void insertLoginLog(LoginLogDto loginLogDto) {
+        LoginLog loginLog = new LoginLog(loginLogDto.getMbrNo(), "127.0.0.1", loginLogDto.getLoginId(), loginLogDto.getLoginYn(), loginLogDto.getResultCd());
+        loginLogRepository.save(loginLog);
+    }
     /**
      * mbrNo null check 값 비교
      * @param mbrNo
@@ -103,4 +113,5 @@ public class MemberService {
     private BooleanExpression mbrBaseLoginIdEq(String loginId) {
         return isEmpty(loginId) ? null : mbrBase.loginId.eq(loginId);
     }
+
 }

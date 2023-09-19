@@ -3,6 +3,7 @@ package com.yummy.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yummy.dto.Const;
+import com.yummy.dto.LoginLogDto;
 import com.yummy.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -104,18 +106,32 @@ public class MemberController {
     @Transactional
     public String goLogin(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
         String result = Const.BOOLEAN_FALSE;;
-
+        MbrBase mbrBase = null;
+        LoginLogDto loginLogDto = new LoginLogDto();
         // request 체크
-        if (null != mbrBaseDto) {
+        if (!ObjectUtils.isEmpty(mbrBaseDto)) {
             if (!isEmpty(mbrBaseDto.getLoginId()) && !isEmpty(mbrBaseDto.getMbrPw())) {
-                MbrBase mbrBase = memberService.searchMember(mbrBaseDto);
+                loginLogDto.setLoginId(mbrBaseDto.getLoginId()); // 로그인 시도 아이디 로그용 등록
+                mbrBase = memberService.searchMember(mbrBaseDto);
                 // 로그인 성공시 토큰 발행
                 if (!ObjectUtils.isEmpty(mbrBase)) {
                     String secretKey = "yummy-secret-key-20230831";
                     long expireTimeMs = 1000 * 60 * 60;
                     result = "Yummy " + JwtTokenUtil.createToken(mbrBase.getLoginId(), secretKey, expireTimeMs);
+
+                    loginLogDto.setMbrNo(mbrBase.getMbrNo());
+                    loginLogDto.setResultCd(Const.CONST_SUCCESS);
+                    loginLogDto.setLoginYn(Const.CONST_TRUE);
+                } else {
+                    loginLogDto.setResultCd(Const.CONST_FAIL);
+                    loginLogDto.setLoginYn(Const.CONST_FAIL);
                 }
             }
+        }
+
+        //로그인 시도시 로그인 로그 등록
+        if (!ObjectUtils.isEmpty(loginLogDto)) {
+            memberService.insertLoginLog(loginLogDto);
         }
 
         return result;
@@ -145,6 +161,22 @@ public class MemberController {
         }
 
         return result;
+    }
+
+    /**
+     *  로그인 로그 등록
+     *  @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/insertLoginLog")
+    @ResponseBody
+    @Transactional
+    public void insertLoginLog(@RequestBody MbrBaseDto mbrBaseDto) throws Exception {
+        // request 체크
+        if (!isEmpty(mbrBaseDto.getLoginId())) {
+
+        }
     }
 
 }
