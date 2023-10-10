@@ -1,5 +1,6 @@
 package com.yummy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class StuffBase extends BaseEntity{
 	@Column(name = "IMG_PATH")		private String imgPath;
 	@Column(name = "IMG_FILENAME")	private String imgFilename;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "stuffBase", cascade = CascadeType.ALL)
 	private List<MbrStuff> mbrStuffs = new ArrayList<>();
 
