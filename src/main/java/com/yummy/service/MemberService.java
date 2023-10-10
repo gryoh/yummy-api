@@ -5,6 +5,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yummy.dto.MbrBaseDto;
 import com.yummy.dto.QMbrBaseDto;
+import com.yummy.entity.MbrRcpLike;
+import com.yummy.entity.QMbrRcpLike;
+import com.yummy.entity.RcpBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,6 +20,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.yummy.entity.QMbrBase.mbrBase;
+import static com.yummy.entity.QMbrRcpLike.mbrRcpLike;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Service

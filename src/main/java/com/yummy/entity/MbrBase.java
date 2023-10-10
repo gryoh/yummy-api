@@ -1,5 +1,6 @@
 package com.yummy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class MbrBase extends BaseEntity{
     @Column(name = "CNCL_DT")       private LocalDateTime cnclDt;  // 회원탈퇴일
     @Column(name = "CNCL_CD")       private String cnclCd;         // 회원탈퇴여부
 
+    @JsonIgnore
     @OneToMany(mappedBy = "mbrBase", cascade = CascadeType.ALL)
     List<MbrRcpLike> mbrRcpLikes = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.yummy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,12 +28,15 @@ public class RcpBase extends BaseEntity {
     @JoinColumn(name = "stuff_no")
     private com.yummy.entity.RcpStuff rcpStuff;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "rcpBase")
     private List<com.yummy.entity.MbrRcpLike> mbrRcpLikes = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "rcpBase")
     private List<com.yummy.entity.RcpStuff> rcpStuffs = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "mealPlanner", cascade = CascadeType.ALL)
     private List<com.yummy.entity.MealPlannerMapping> mealPlannerMappings = new ArrayList<>();
 
