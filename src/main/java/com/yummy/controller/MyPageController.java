@@ -6,6 +6,7 @@ import com.yummy.dto.Const;
 import com.yummy.dto.MbrBaseDto;
 import com.yummy.entity.MbrBase;
 import com.yummy.entity.RcpBase;
+import com.yummy.entity.StuffBase;
 import com.yummy.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -54,6 +58,62 @@ public class MyPageController {
 
         }
 
+        return result;
+    }
+
+    /**
+     * 회원 재료 조회
+     * @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/getMyPageMbrStuff")
+    @ResponseBody
+    @Transactional
+    public String getMyPageMbrStuff(Authentication authentication) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+
+        // request 체크
+        if (!isEmpty(authentication.getName())) {
+            MbrBaseDto mbrBaseDto = new MbrBaseDto(authentication.getName());
+            List<StuffBase> myPageMbrStuff = myPageService.getMyPageMbrStuff(mbrBaseDto);
+            if (!ObjectUtils.isEmpty(myPageMbrStuff)) {
+                result = mapper.registerModule(new JavaTimeModule()).writeValueAsString(myPageMbrStuff);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 회원 찜한 레시피, 재료 조회
+     * @param mbrBaseDto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/getMyPageRcpStuff")
+    @ResponseBody
+    @Transactional
+    public String getMyPageRcpStuff(Authentication authentication) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+
+        // request 체크
+        if (!isEmpty(authentication.getName())) {
+            MbrBaseDto mbrBaseDto = new MbrBaseDto(authentication.getName());
+            List<StuffBase> myPageMbrStuff = myPageService.getMyPageMbrStuff(mbrBaseDto);
+            List<RcpBase> myPageMbrRcpLike = myPageService.getMyPageMbrRcpLike(mbrBaseDto);
+            Map<String, List<Object>> myPageRcpStuff = new HashMap<>();
+            if (!ObjectUtils.isEmpty(myPageMbrStuff)) {
+                myPageRcpStuff.put("myPageMbrStuff", Collections.singletonList(myPageMbrStuff));
+            }
+            if (!ObjectUtils.isEmpty(myPageMbrRcpLike)) {
+                myPageRcpStuff.put("myPageMbrRcpLike", Collections.singletonList(myPageMbrRcpLike));
+            }
+            if (!ObjectUtils.isEmpty(myPageRcpStuff)) {
+                result = mapper.registerModule(new JavaTimeModule()).writeValueAsString(myPageRcpStuff);
+            }
+        }
         return result;
     }
 }

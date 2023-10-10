@@ -6,6 +6,7 @@ import com.yummy.dto.MbrBaseDto;
 import com.yummy.entity.MbrRcpLike;
 import com.yummy.entity.QRcpBase;
 import com.yummy.entity.RcpBase;
+import com.yummy.entity.StuffBase;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import static com.yummy.entity.QMbrBase.mbrBase;
 import static com.yummy.entity.QMbrRcpLike.mbrRcpLike;
+import static com.yummy.entity.QStuffBase.stuffBase;
+import static com.yummy.entity.QMbrStuff.mbrStuff;
 import static com.yummy.entity.QRcpBase.rcpBase;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -37,6 +40,22 @@ public class MyPageService {
                                     .fetch();
         return rcpBaseList;
     }
+
+    /** 마이페이지 최근 찜한상품 3개 **/
+    public List<StuffBase> getMyPageMbrStuff(MbrBaseDto mbrBaseDto) {
+
+        List<StuffBase> rcpBaseList = queryFactory
+                .select(mbrStuff.stuffBase)
+                .from(mbrStuff)
+                .leftJoin(mbrStuff.mbrBase, mbrBase)
+                .where(mbrBasemMbrNodEq(mbrBaseDto.getMbrNo()))
+                .orderBy(mbrStuff.sysModTime.desc())
+                .limit(3)
+                .fetch();
+
+        return rcpBaseList;
+    }
+
 
 
     /**
